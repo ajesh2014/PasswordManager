@@ -1,0 +1,11 @@
+1) Create the MYSQL Database called password_manager
+2) Import the database table from the file password_manager.sql
+3) Create a User account for the database with the following credentials :
+
+DB HOST : localhost
+DB NAME : password_manager,
+DB PASSWORD : b3XYYbUXuEPzwttL 
+DB USER : password_manager
+
+4) copy  all the php files into your server and start at index.php
+5) you will need to register to login.

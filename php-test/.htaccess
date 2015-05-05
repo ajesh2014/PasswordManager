@@ -1,0 +1,18 @@
+<IfModule mod_rewrite.c>
+
+RewriteEngine On
+
+#rule to remove the file extensions
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [NC,L]
+
+#rule to rewrite the dirctory structure
+RewriteCond %{REQUEST_URI} !views/
+RewriteRule ^(.*)$ views/$1 [L,QSA]
+
+#rule to rewrite the edit page
+#RewriteCond %{REQUEST_URI} !edit/
+#RewriteRule ^php-test/edit/([^/]*)$ /php-test/edit?id=$1 [L]
+
+</IfModule>
