@@ -1,42 +1,78 @@
 <?php
-	// requiring database class 
+
+	session_start();
+
+	// checking if a user is currently logged in
+	if(isset($_SESSION['userid'])){
+		header("location: ../views/dashboard.php");
+	}
+
+	// requiring database and validator classes
 	require('DatabaseController.php');
-	if (isset($_POST['submit'])) {
-			if (empty($_POST['username']) || empty($_POST['password'])) {
-				// creating assotive array for each field
-				$error = array("username_error"=>'', "password_error" => '');
-				$error['username_error'] = 'Username is invalid';
-				$error['password_error'] = 'Password is invalid';
+	require('ValidatorController.php');
+	
+	// validator and database obj
+	$validator = new Validator();
+	$db = new Database();
+	
+	
+	if ($validator -> validateSubmit()) {
+	
+		if ($validator -> validateInput()) {
+			
+			
+			// authorization proccess
+			$userId = $db -> registerUser($_POST['username'] , $_POST['password']);
+		
+			if($userId !== 0){
+			
+				session_start();
 				
-				// returning the result
-				return $error;
+				$_SESSION['userid']=$userId;
+				
+				header("location: dashboard");
+				
+			}else{
+			
+				// error messages if any needed
+				$error_message = array("username" => "Please enter a Application name",
+										"password" => "Please enter a Password"
+										);
+					
+				// send back current data changed with errors
+				$row = array("username" => $_POST['username'],
+								"password" => $_POST['password']
+							);
+									
+					
+				// return validation errors if incorrect input
+				return $error = $validator -> getErrors();
+			
 			}
+		} else {
+				
+			// error messages if any needed
+			$error_message = array("username" => "Please enter a Application name",
+									"password" => "Please enter a Password"
+									);
+				
+			// send back current data changed with errors
+			$row = array("username" => $_POST['username'],
+							"password" => $_POST['password']
+						);
+								
+				
+			// return validation errors if incorrect input
+			return $error = $validator -> getErrors();
+				
 		}
-	if (!isset($_POST['submit'])) {
+	}
+	
+	else if (!$validator -> validateSubmit()) {
 	
 		return;
+	
 	}
 	
-	else{
-		// Database object
-		$db = new Database();  
-		
-		// authorization proccess
-		$user_id = $db -> Reg($_POST['username'] , $_POST['password']);
-		
-		if($user_id !== 0){
-			session_start();
-			$_SESSION['userid']=$user_id;
-			//var_dump($user_id);
-			header("location: dashboard");
-		}else{
-			$error = array("username_error"=>'', "password_error" => '');
-			$error['username_error'] = 'Username is invalid';
-			$error['password_error'] = 'Password is invalid';
-			
-			// returning the result
-			return $error;
-		}
-		
-	}
+	
 ?>

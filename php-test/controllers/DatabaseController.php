@@ -73,12 +73,15 @@ class Database
 		// Escaping stings for mysql injection
 		$username = $connection -> real_escape_string($usernameUnescaped);
 		$password = $connection -> real_escape_string($passwordUnescaped); 
-		$passwordHashed= password_hash($password,  PASSWORD_BCRYPT);
-		
+		$passwordHashed = password_hash($password,  PASSWORD_BCRYPT);
+		//var_dump($passwordHashed);
 		// prepair query string 
-		if($stmt = $connection -> prepare("INSERT INTO users (username , password) VALUES ( ?, ?)")){
-	
-			$stmt->bind_param('ss', $username, $passwordHash);
+		
+		//echo "INSERT INTO users (username, password) VALUES ('".$username."', '".$passwordHashed."')";
+		//die();	
+		if($stmt = $connection -> prepare("INSERT INTO users (username , password) VALUES (? , ?)")){
+		
+			$stmt->bind_param('ss', $username, $passwordHashed);
 			
 			$stmt->execute();
 			
@@ -89,7 +92,7 @@ class Database
 		}
 		
 		$connection -> close();
-		
+		 
 		return $userId;
 	}	
        
