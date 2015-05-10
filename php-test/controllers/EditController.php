@@ -23,7 +23,8 @@
 				$result = $db -> editPassword($_SESSION['userid'], 
 												$_POST['id'], 
 												$_POST['appname'], 
-												$_POST['password'] 
+												$_POST['password'],
+												$_POST['sphrase'] 
 												);
 				
 				if($result){
@@ -54,7 +55,7 @@
 	else if (!$validator -> validateSubmit()) {
 	
 		// getting the password entry 
-		return $row = $db -> getPassword($_SESSION['userid'] , $_GET['id']);
+		return $row = $db -> getPassword($_SESSION['userid']);
 		
 	}
 	

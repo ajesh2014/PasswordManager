@@ -22,7 +22,8 @@
 			// add the new password
 			$passwordId = $db -> addPassword(	$_SESSION['userid'] , 
 												$_POST['appname'] , 
-												$_POST['password']
+												$_POST['password'],
+												$_POST['sphrase']
 											);
 				
 			if($passwordId !== 0){

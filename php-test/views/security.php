@@ -14,11 +14,12 @@
 		<h2>Edit application Form</h2>
 		
 			<form action="" method="post">
-				<div><?php if(isset($error['remphase'])){echo $error_message['remphase'];} ?></div>
+				<div><?php if(isset($error['sphrase'])){echo $error_message['sphrase'];} ?></div>
 				<label>Application Name :</label>
-				<input id="remphase" name="remphase" placeholder="name" type="text" value='<?php if(!empty($row['remphase'])){echo $row['remphase'];} ?>'>
+				<input id="sphrase" name="sphrase" placeholder="" type="text" value='<?php if(!empty($row['sphrase'])){echo $row['sphrase'];} ?>'>
 				
 				<input id="id" name="id"  type="hidden" value='<?php  echo $_GET['id']; ?>'>
+				<input id="action" name="action"  type="hidden" value='<?php  echo $_GET['action']; ?>'>
 				<input name="submit" type="submit" value=" save ">
 			</form>
 		</div>

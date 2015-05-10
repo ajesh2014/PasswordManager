@@ -33,8 +33,8 @@
 			<tr>
 			  <td><?php echo $row['application'];?></td>
 			  <td><?php echo $row['password'];?></td>
-				<td><a href="edit?id=<?php echo $row['id'];?>">Edit</a> / 
-					<a href="delete?id=<?php echo $row['id'];?>">Delete</a>
+				<td><a href="security?id=<?php echo $row['id'];?>&action=Edit">Edit</a> / 
+					<a href="security?id=<?php echo $row['id'];?>&action=Delete">Delete</a>
 				</td>				  
 			</tr>
 		<?php } ?>
