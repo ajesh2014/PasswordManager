@@ -25,15 +25,25 @@ class Cipher {
 	
 		// Cutting key down to size
 		$key = substr($key, 0 , 32);
+		
+	//echo $input;
 	
 		$cipherPasswordDecyrpt = base64_decode($input);
 		
+		//echo $cipherPasswordDecyrpt;
+		
 		$ivDec = substr($cipherPasswordDecyrpt, 0, $this -> iv_size);
+		
 		
 		$encPassword = substr($cipherPasswordDecyrpt, $this -> iv_size);
 	
+		//echo $encPassword.'/n';
+	
 		$decPassword = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $key,
 										$encPassword, MCRYPT_MODE_CBC, $ivDec);
+	
+		//echo trim($decPassword);
+		//die();
 	
         return trim($decPassword);
     }

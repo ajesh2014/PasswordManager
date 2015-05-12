@@ -32,7 +32,19 @@
 					// redirect on success 
 					header("location: dashboard");
 				
-				} 
+				} else {
+				
+					// error messages if any needed
+					$error_message = array("sphrase" => "Please enter correct secrete phrase ");
+					
+					// send back current data changed with errors
+					$row = array("application" => $_POST['appname'],
+								"password" => $_POST['password']
+							);
+				
+					return $error = ["sphrase" => 'sphrase'];
+				
+				}
 	
 			} else {
 				

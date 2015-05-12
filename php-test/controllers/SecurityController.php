@@ -25,19 +25,18 @@
 				
 			// add the new password
 			$result = $db -> spraseVerify(	$_SESSION['userid'] , 
-											$_GET['id'],
+											$_POST['id'],
 											$_POST['sphrase']
 										);
 										
-			var_dump($result );
+			
 			
 									
 				
 			if($result && isset($_GET['action'])){
 				
-				//$db -> setRecordAuthorized($_SESSION['userid'] , $_GET['id']));
-				var_dump($db -> setRecordAuthorized($_SESSION['userid'] , $_GET['id']));
-				//die();
+				$db -> setRecordAuthorized($_SESSION['userid'] , $_GET['id']);
+				
 				
 		
 				if(strcmp($_GET['action'], 'Edit') == 0){

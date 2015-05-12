@@ -164,12 +164,11 @@ class Database
 		
 		$recordId = $this -> getOperationRecordId( $userId );
 		
-		
-		echo "SELECT * FROM password_list WHERE user_id=".$userId." AND user_id = ".$recordId;
+		var_dump($recordId);
 		
 		
 		$result = $connection -> query("SELECT * FROM password_list WHERE user_id=".$userId." AND id = ".$recordId);
-		
+		echo "SELECT * FROM password_list WHERE user_id=".$userId." AND id = ".$recordId;
 		
 		while ($row = $result -> fetch_assoc()) {
 		
@@ -178,10 +177,9 @@ class Database
         }
 
 		$cipher = new Cipher();
-		
+		//echo $cipher -> decrypt('$2y$10$Ca4bgD.DJgoEUyZks6xMzewDemay2ZkuUp7j1gpRQhJB5Uz8w.6iK','9ml3cMSdCR8EGlDpnWX0GPeIH3L7C3Y/EfQkSCDOztTtwMIgVGP2L4GmnaDWeGxcAjKEkMzJYj8x+wx2Pe8NLw==');
 		$rows[0]['password'] = $cipher -> decrypt($rows[0]['sphrase'], $rows[0]['password']);
 		
-		//var_dump($rows[0]);
 	
 		
 		$connection -> close();
@@ -190,11 +188,7 @@ class Database
 	}
 	
 	public function editPassword( $userId, $recordId, $appnameUnescaped , $passwordUnescaped , $sphraseUnescaped ) {
-	
-		echo $userId.$recordId.$sphraseUnescaped;
-		var_dump($this -> spraseVerify($userId, $recordId, $sphraseUnescaped));
-		die();
-		
+
 	
         // Connect to the database
         $connection = $this -> connect();
@@ -207,13 +201,18 @@ class Database
 		
 		// check if phrase is correct
 		if(!$this -> spraseVerify($userId, $recordId, $sphraseUnescaped)){
-			echo 'test';
+			
 			return false;
 			
 		}
 		
+		
+		
 		// hashing secreate phase as encyrption key
-		$sphraseHashed = password_hash($sphrase,  PASSWORD_BCRYPT);
+		$sphraseHashed = $this -> getSphrase($userId, $recordId);
+		
+		var_dump($sphraseHashed);
+		//die();
 		
 		//encrypt the password
 		$cipher = new Cipher();
@@ -323,15 +322,51 @@ class Database
 		
 	}
 	
+	// Function used to check if the user is the correct person 
+	public function getSphrase($userId, $recordId) {
+        // Connect to the database
+		
+        $connection = $this -> connect();
+		 
+		
+		// prepair query string 
+		if($stmt = $connection -> prepare("SELECT sphrase FROM password_list WHERE user_id=? AND id=?")){
+		
+			$stmt->bind_param('ii', $userId , $recordId);
+			
+			$stmt->execute();
+			
+			$stmt->bind_result($sphraseHashed);
+			
+			while ($stmt->fetch()) {
+			
+				$sphrase;
+			}
+			
+			$stmt -> close();
+				
+		}
+		
+		//$connection -> close();
+		
+		return $sphraseHashed;
+		
+	}
+	
 	
 		public function setRecordAuthorized( $userId, $recordId) {
+		
+		
+		
 			// Connect to the database
 			$connection = $this -> connect();
-	
-			if($this -> getOperationRecord($userId, $recordId)){
+			
+			var_dump($this -> getOperationRecord($userId));
+			
+			
+			if($this -> getOperationRecord($userId)){
 	
 				
-
 				// prepair query string 
 				if($stmt = $connection -> prepare("UPDATE operation SET pw_id = ? WHERE user_id = ? ")){
 				
@@ -340,13 +375,13 @@ class Database
 					if ($stmt->execute()) {
 					
 						$connection -> close();
-						
+					   
 						return true;
 						
 					}else{
 					
 						$connection -> close();
-						
+						echo 'test';
 						return false;
 						
 					}
@@ -356,10 +391,13 @@ class Database
 				}else{
 				
 					$connection -> close();
-					
+					echo 'test1';
+					die();
 					return false;
 				}
 			} else {
+			
+				
 			
 				// prepair query string 
 				if($stmt = $connection -> prepare("INSERT INTO operation (user_id , pw_id ) VALUES ( ?, ? )")){
@@ -395,17 +433,18 @@ class Database
 		
 	}
 	
-	private function getOperationRecord( $userId , $recordId ){
+	private function getOperationRecord( $userId ){
 		
 		 // Connect to the database
         $connection = $this -> connect();
 		
 		
-		$stmt = $connection -> prepare("SELECT * FROM operation WHERE user_id=? AND id=? LIMIT 1");
+		
+		$stmt = $connection -> prepare("SELECT * FROM operation WHERE user_id=?  LIMIT 1");
 		// check if record exists
 		if($stmt){
 		
-			$stmt->bind_param('ii', $userId , $recordId);
+			$stmt->bind_param('i', $userId );
 			
 			$stmt->execute();
 			
@@ -447,8 +486,7 @@ class Database
 			
 				$sphrase;
 			}
-			
-			var_dump($recordId);
+				
 			
 			$stmt -> close();
 			
