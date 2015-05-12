@@ -39,7 +39,8 @@
 					
 					// send back current data changed with errors
 					$row = array("application" => $_POST['appname'],
-								"password" => $_POST['password']
+								"password" => $_POST['password'],
+								"id" =>$_POST['id']
 							);
 				
 					return $error = ["sphrase" => 'sphrase'];
