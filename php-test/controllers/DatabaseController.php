@@ -164,11 +164,9 @@ class Database
 		
 		$recordId = $this -> getOperationRecordId( $userId );
 		
-		var_dump($recordId);
-		
 		
 		$result = $connection -> query("SELECT * FROM password_list WHERE user_id=".$userId." AND id = ".$recordId);
-		echo "SELECT * FROM password_list WHERE user_id=".$userId." AND id = ".$recordId;
+		
 		
 		while ($row = $result -> fetch_assoc()) {
 		
@@ -177,10 +175,8 @@ class Database
         }
 
 		$cipher = new Cipher();
-		//echo $cipher -> decrypt('$2y$10$Ca4bgD.DJgoEUyZks6xMzewDemay2ZkuUp7j1gpRQhJB5Uz8w.6iK','9ml3cMSdCR8EGlDpnWX0GPeIH3L7C3Y/EfQkSCDOztTtwMIgVGP2L4GmnaDWeGxcAjKEkMzJYj8x+wx2Pe8NLw==');
-		$rows[0]['password'] = $cipher -> decrypt($rows[0]['sphrase'], $rows[0]['password']);
 		
-	
+		$rows[0]['password'] = $cipher -> decrypt($rows[0]['sphrase'], $rows[0]['password']);
 		
 		$connection -> close();
 		
