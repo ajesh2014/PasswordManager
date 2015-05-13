@@ -187,6 +187,8 @@ class Database
 		return $rows[0];
 	}
 	
+	
+	/* function to save password after editing */
 	public function editPassword( $userId, $recordId, $appnameUnescaped , $passwordUnescaped , $sphraseUnescaped ) {
 
 	
@@ -225,6 +227,9 @@ class Database
 			$stmt->bind_param('ssii', $appname ,  $encyptedPassword, $userId , $recordId);
 			
 			if ($stmt->execute()) {
+				var_dump($userId);
+				
+				$this -> removeAuthorizedRecord($userId);
 			
 				$connection -> close();
 				
@@ -249,6 +254,7 @@ class Database
 		
 	}
 	
+	
 	public function deletePassword($userId, $recordId) {
 	
         // Connect to the database
@@ -260,7 +266,7 @@ class Database
 			$stmt->bind_param('ii', $userId , $recordId);
 			
 			if ($stmt->execute()) {
-			
+				$this -> removeAuthorizedRecord($userId);
 				return true;
 				
 			}else{
@@ -271,11 +277,11 @@ class Database
 			
 			$stmt->close();
 			
-			$connection -> close();
+			//$connection -> close();
 			
 		}else{
 		
-			$connection -> close();
+			//$connection -> close();
 			
 			return false;
 			
@@ -356,8 +362,7 @@ class Database
 	
 		public function setRecordAuthorized( $userId, $recordId) {
 		
-		
-		
+
 			// Connect to the database
 			$connection = $this -> connect();
 			
@@ -374,13 +379,13 @@ class Database
 					
 					if ($stmt->execute()) {
 					
-						$connection -> close();
+						//$connection -> close();
 					   
 						return true;
 						
 					}else{
 					
-						$connection -> close();
+						// $connection -> close();
 						echo 'test';
 						return false;
 						
@@ -390,7 +395,7 @@ class Database
 					
 				}else{
 				
-					$connection -> close();
+					//$connection -> close();
 					echo 'test1';
 					die();
 					return false;
@@ -406,13 +411,13 @@ class Database
 					
 					if ($stmt->execute()) {
 					
-						$connection -> close();
+						//$connection -> close();
 						
 						return true;
 						
 					}else{
 					
-						$connection -> close();
+						//$connection -> close();
 						
 						return false;
 						
@@ -422,7 +427,7 @@ class Database
 					
 				}else{
 				
-					$connection -> close();
+					//$connection -> close();
 					
 					return false;
 				}
@@ -433,6 +438,7 @@ class Database
 		
 	}
 	
+	/* checking if a record exists in the operations table */
 	private function getOperationRecord( $userId ){
 		
 		 // Connect to the database
@@ -496,6 +502,43 @@ class Database
 		
 		//$connection -> close();
 	
+	}
+	
+	/* removing record id from operations table */
+	public function removeAuthorizedRecord( $userId ) {
+		
+
+			// Connect to the database
+			$connection = $this -> connect();
+			
+			var_dump($this -> getOperationRecord($userId));
+			
+			
+			if($this -> getOperationRecord($userId)){
+	
+				
+				// prepair query string 
+				if($stmt = $connection -> prepare("UPDATE operation SET pw_id ='0' WHERE user_id = ? ")){
+				
+					$stmt->bind_param('i',  $userId );
+					
+					if ($stmt->execute()) {
+					
+						$connection -> close();
+					   
+						return true;
+						
+					}else{
+					
+						$connection -> close();
+						echo 'test';
+						return false;
+						
+					}
+
+					$stmt->close();
+				}
+			}
 	}
 }
 ?>

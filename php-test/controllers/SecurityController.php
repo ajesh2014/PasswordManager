@@ -43,14 +43,20 @@
 					
 					header("location: edit");
 					
-				} else if (strcmp($_GET['action'], 'View')){
+				} 
+				if (strcmp($_GET['action'], 'View')){
 				
 				
 				
-				} else if (strcmp($_GET['action'], 'Delete')) {
+				} 
+				if (strcmp($_GET['action'], 'Delete') == 0) {
+
 				
+					if($db -> deletePassword($_SESSION['userid'] , $_GET['id'])){
 					
-				
+						header("location: dashboard");
+						
+					}
 				}
 					
 			} else {

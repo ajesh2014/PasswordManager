@@ -24,7 +24,7 @@
 		  <thead>
 			<tr>
 			  <th>Application</th>
-			  <th>Password</th>
+			
 			  <th>Edit / Delete</th>
 			</tr>
 		  </thead>
@@ -32,7 +32,7 @@
 		<?php foreach ($rows as $row){ ?>
 			<tr>
 			  <td><?php echo $row['application'];?></td>
-			  <td><?php echo $row['password'];?></td>
+			 
 				<td><a href="security?id=<?php echo $row['id'];?>&action=Edit">Edit</a> / 
 					<a href="security?id=<?php echo $row['id'];?>&action=Delete">Delete</a>
 				</td>				  
